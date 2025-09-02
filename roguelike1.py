@@ -4,9 +4,6 @@ import sys
 import random
 import time
 
-
-
-
 # --- クラスの定義 ---
 class Job:
     """職業の基本クラス。"""
@@ -30,9 +27,6 @@ class Assassin(Job):
     def __init__(self):
         super().__init__("暗殺者", 100, 30)
 
-
-
-
 class Player:
     """プレイヤー（魂）のクラス。乗り移った体のジョブを持つ。"""
     def __init__(self, name, body_job):
@@ -47,9 +41,6 @@ class Player:
         enemy.hp -= damage
         print(f"{self.name}は{enemy.body.name}に{damage}のダメージを与えた！")
         
-
-
-
 class Enemy:
     """敵（過去の冒険者）のクラス。"""
     def __init__(self, name, job):
@@ -64,21 +55,40 @@ class Enemy:
         player.hp -= damage
         print(f"{self.name}は{player.name}に{damage}のダメージを与えた！")
 
-
-
-
 # --- ゲームの実行部分 ---
+print()
+print()
 print("魂よ、目覚めよ。")
+print()
 player_name = input("あなたの名前を入力してください: ")
+print() # ここに空白行を追加
+print()
+print()
+
 
 # ジョブの選択肢をリストにまとめる
 jobs = [Warrior(), Mage(), Assassin()]
 
+print('--------------------------------------')
+print()
+print()
 print("どの亡骸に乗り移りますか？")
+time.sleep(1.1)
+print()
 for i, job in enumerate(jobs, 1):
     print(f"{i}: {job.name}（HP: {job.base_hp}, 攻撃力: {job.base_attack}）")
 
-job_choice = input("番号を入力してください: ")
+
+print()
+print()
+time.sleep(1.1)
+job_choice = input('--------------番号を入力してください:')
+print()
+print()
+print()
+print()
+print()
+
 
 # 選択されたジョブを反映
 try:
@@ -94,11 +104,20 @@ enemy = Enemy("敵の" + enemy_job.name, enemy_job)
 
 print(f"\n魂は{player.body.name}の体に乗り移った！")
 print(f"ステータス: HP {player.hp}, 攻撃力 {player.attack}")
+print()
+print()
+print() 
+print() 
+print() 
+print() 
+time.sleep(2.7)
 print(f"敵が現れた！{enemy.name} (HP: {enemy.hp}, 攻撃力: {enemy.attack})")
-print("--- 戦闘開始！ ---")
-
-
-
+print()
+time.sleep(2.3)
+print("----------- 戦闘開始！ -----------")
+print()
+print() 
+time.sleep(3)
 
 # 新しい戦闘ループ
 combatants = [player, enemy]
@@ -112,21 +131,28 @@ while player.hp > 0 and enemy.hp > 0:
             enemy.attack_player(player)
 
         # 1秒待機
-        time.sleep(2)
+        time.sleep(1.7)
 
         # どちらかが倒れたらループを抜ける
         if player.hp <= 0 or enemy.hp <= 0:
             break
             
-print("--- 戦闘終了 ---")
-
-
-
+print()
+print()
+print("------------ 戦闘終了 ------------")
+print()
+print()
+print()
+print()
+print()
+time.sleep(2.5)
 
 # 勝敗判定と結果の表示
 if player.hp > 0:
     print(f"【{player.name}の勝利！】")
-    print(f"{enemy.name}を打ち破った！")
+    time.sleep(1.8)
+    print(f"【{enemy.name}を打ち破った！】")
 else:
-    print(f"【{player.name}は敗北した…】")
-    print(f"{player_name}の魂は消滅した。亡骸はダンジョンで眠るだろう...")
+    print(f"【{player.name}は敗北した… 】")
+    time.sleep(2)
+    print(f"【{player_name}の魂は消滅した。亡骸はダンジョンで眠るだろう… 】")
