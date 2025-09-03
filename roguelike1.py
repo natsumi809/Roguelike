@@ -1,4 +1,4 @@
-# 段階1: ゲームシステム作成（『魂』『亡骸』システム）
+# 段階2: 戦闘要素『素早さ』の追加
 
 import sys
 import random
@@ -7,28 +7,31 @@ import time
 
 
 
+
 # --- クラスの定義 ---
 class Job:
     """亡骸の基本クラス。"""
-    def __init__(self, name, base_hp, base_attack):
+    def __init__(self, name, base_hp, base_attack, base_speed):
         self.name = name
         self.base_hp = base_hp
         self.base_attack = base_attack
+        self.base_speed = base_speed
+
 
 class Warrior(Job):
     """戦士クラス：Jobクラスを継承。"""
     def __init__(self):
-        super().__init__("戦士", 150, 40)
+        super().__init__("戦士", 130, 40, 30)
 
 class Mage(Job):
     """魔法使いクラス：Jobクラスを継承。"""
     def __init__(self):
-        super().__init__("魔法使い", 80, 50)
+        super().__init__("魔法使い", 90, 45, 40)
 
 class Assassin(Job):
     """暗殺者クラス：Jobクラスを継承。"""
     def __init__(self):
-        super().__init__("暗殺者", 100, 30)
+        super().__init__("暗殺者", 110, 30, 60)
 
 
 
@@ -40,6 +43,7 @@ class Player:
         self.body = body_job
         self.hp = self.body.base_hp
         self.attack = self.body.base_attack
+        self.speed = self.body.base_speed
 
     def attack_enemy(self, enemy):
         """敵を攻撃するメソッド。"""
@@ -50,6 +54,7 @@ class Player:
 
 
 
+
 class Enemy:
     """敵（過去の冒険者）のクラス。"""
     def __init__(self, name, job):
@@ -57,6 +62,7 @@ class Enemy:
         self.body = job
         self.hp = self.body.base_hp
         self.attack = self.body.base_attack
+        self.speed = self.body.base_speed
         
     def attack_player(self, player):
         """プレイヤーを攻撃するメソッド。"""
@@ -103,7 +109,7 @@ print("どの亡骸に乗り移りますか？")
 time.sleep(1.1)
 print()
 for i, job in enumerate(jobs, 1):
-    print(f"{i}: {job.name}（HP: {job.base_hp}, 攻撃力: {job.base_attack}）")
+    print(f"{i}: {job.name}（HP: {job.base_hp}, 攻撃力: {job.base_attack}, 素早さ: {job.base_speed}）")
 
 print()
 print()
@@ -115,7 +121,6 @@ print()
 print()
 print()
 print()
-
 
 # 選択されたジョブを反映
 try:
@@ -129,8 +134,8 @@ player = Player(player_name, initial_job)
 enemy_job = random.choice(jobs)
 enemy = Enemy("敵の" + enemy_job.name, enemy_job)
 
-print(f"\n魂は{player.body.name}の亡骸に乗り移った！")
-print(f"ステータス: HP {player.hp}, 攻撃力 {player.attack}")
+print(f"魂は{player.body.name}の亡骸に乗り移った！")
+print(f"ステータス: HP {player.hp}, 攻撃力 {player.attack}, 素早さ: {player.speed}")
 time.sleep(2)
 print()
 print()
@@ -139,7 +144,7 @@ print()
 print()
 print()
 print()
-print(f"敵が現れた！{enemy.name} (HP: {enemy.hp}, 攻撃力: {enemy.attack})")
+print(f"敵が現れた！{enemy.name} (HP: {enemy.hp}, 攻撃力: {enemy.attack}, 素早さ: {enemy.speed})")
 print()
 print()
 print()
@@ -166,17 +171,23 @@ print()
 time.sleep(3)
 
 # 新しい戦闘ループ
-combatants = [player, enemy]
-random.shuffle(combatants) 
 turn = 1
 
 while player.hp > 0 and enemy.hp > 0:
     print()
-    print(f"-------- ターン{turn} -----------------------------")
+    print(f"-- ターン{turn} -----------------------------------")
     print()
     print()
     print()
     time.sleep(2)
+
+    # 行動順を素早さで決定し、同じ場合はランダムにする
+    combatants = [player, enemy]
+    if player.speed == enemy.speed:
+        random.shuffle(combatants) # 素早さが同じ場合はシャッフル
+    else:
+        # 素早さが異なる場合は、素早さの高い順にソート
+        combatants = sorted(combatants, key=lambda c: c.speed, reverse=True) 
 
     for current_turn_character in combatants:
         if current_turn_character == player:
