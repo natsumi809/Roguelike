@@ -1,4 +1,4 @@
-# 段階3: 会心、逃走、ジョブ相性の追加
+# 段階3: 会心、逃走、ジョブ相性の追加 (最終版 - 修正)
 
 import sys
 import random
@@ -12,7 +12,7 @@ class Job:
         self.base_hp = base_hp
         self.base_attack = base_attack
         self.base_speed = base_speed
-        self.weakness = weakness  # 変更点：新しい属性「weakness」
+        self.weakness = weakness
 
 class Warrior(Job):
     """戦士クラス：Jobクラスを継承。"""
@@ -44,15 +44,15 @@ class Player:
         is_critical = False
         is_advantage = False
 
-        # ジョブ相性の判定（変更点：敵の弱点と自身のジョブ名を比較）
+        # ジョブ相性の判定とダメージ加算
         if enemy.body.weakness == self.body.name:
             damage += 10
             is_advantage = True
 
-        # 会心の一撃の判定
+        # 会心の一撃の判定とダメージ加算
         critical_chance = 10 + self.speed
         if random.randint(1, 100) <= critical_chance:
-            damage = self.attack + 15
+            damage += 15  # 変更点: ダメージを上書きせず、加算する
             is_critical = True
 
         enemy.hp -= damage
@@ -89,15 +89,15 @@ class Enemy:
         is_critical = False
         is_advantage = False
 
-        # ジョブ相性の判定（変更点：プレイヤーの弱点と自身のジョブ名を比較）
+        # ジョブ相性の判定とダメージ加算
         if player.body.weakness == self.body.name:
             damage += 10
             is_advantage = True
 
-        # 会心の一撃の判定
+        # 会心の一撃の判定とダメージ加算
         critical_chance = 10 + self.speed
         if random.randint(1, 100) <= critical_chance:
-            damage = self.attack + 15
+            damage += 15  # 変更点: ダメージを上書きせず、加算する
             is_critical = True
 
         player.hp -= damage
