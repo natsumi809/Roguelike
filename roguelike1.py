@@ -39,7 +39,7 @@ class Player:
         """敵を攻撃するメソッド。"""
         damage = self.attack
         enemy.hp -= damage
-        print(f"{self.name}は{enemy.body.name}に{damage}のダメージを与えた！")
+        print(f"{self.name}の攻撃！  -{damage}")
         
 class Enemy:
     """敵（過去の冒険者）のクラス。"""
@@ -53,18 +53,31 @@ class Enemy:
         """プレイヤーを攻撃するメソッド。"""
         damage = self.attack
         player.hp -= damage
-        print(f"{self.name}は{player.name}に{damage}のダメージを与えた！")
+        print(f"{self.name}の攻撃！  -{damage}")
+
+# --- ユーティリティ関数 ---
+def create_hp_bar(current_hp, max_hp, bar_length=10):
+    """HPバー文字列を生成する関数。"""
+    # HPの割合を計算し、バーに変換
+    filled_blocks = int(current_hp / max_hp * bar_length)
+    empty_blocks = bar_length - filled_blocks
+    
+    # ♥ と ♡ でHPバーを生成
+    hp_bar = "♥" * filled_blocks + "♡" * empty_blocks
+    return f"[{hp_bar}] {current_hp}/{max_hp}"
 
 # --- ゲームの実行部分 ---
 print()
 print()
-print("魂よ、目覚めよ。")
+print("汝、目覚めよ。")
 print()
-player_name = input("あなたの名前を入力してください: ")
-print() # ここに空白行を追加
+player_name = input("- あなたの名前を入力してください - \n" 
+                    '□ ')
 print()
 print()
-
+print()
+print()
+print()
 
 # ジョブの選択肢をリストにまとめる
 jobs = [Warrior(), Mage(), Assassin()]
@@ -78,11 +91,11 @@ print()
 for i, job in enumerate(jobs, 1):
     print(f"{i}: {job.name}（HP: {job.base_hp}, 攻撃力: {job.base_attack}）")
 
-
 print()
 print()
-time.sleep(1.1)
+time.sleep(1.8)
 job_choice = input('--------------番号を入力してください:')
+print()
 print()
 print()
 print()
@@ -104,55 +117,94 @@ enemy = Enemy("敵の" + enemy_job.name, enemy_job)
 
 print(f"\n魂は{player.body.name}の体に乗り移った！")
 print(f"ステータス: HP {player.hp}, 攻撃力 {player.attack}")
+time.sleep(2)
 print()
 print()
-print() 
-print() 
-print() 
-print() 
-time.sleep(2.7)
+print()
+print()
+print()
+print()
+print()
 print(f"敵が現れた！{enemy.name} (HP: {enemy.hp}, 攻撃力: {enemy.attack})")
 print()
-time.sleep(2.3)
-print("----------- 戦闘開始！ -----------")
 print()
-print() 
+print()
+print()
+print()
+print()
+print()
+time.sleep(2)
+print("--- 戦闘開始！ ---")
+print()
+
+# HPバーの初期表示
+print(f"プレイヤーHP: {create_hp_bar(player.hp, player.body.base_hp)}")
+print(f"敵HP: {create_hp_bar(enemy.hp, enemy.body.base_hp)}")
+print()
+print()
+print()
+print()
+print()
+
 time.sleep(3)
 
 # 新しい戦闘ループ
 combatants = [player, enemy]
 random.shuffle(combatants) 
+turn = 1
 
 while player.hp > 0 and enemy.hp > 0:
+    print(f"---------------- ターン{turn} ----------------")
+    print()
+    print()
+    print()
+    time.sleep(2)
+
     for current_turn_character in combatants:
         if current_turn_character == player:
+            print(f"----   {player_name}のターン   ----")
             player.attack_enemy(enemy)
         else:
+            print(f"----   {enemy.name}のターン   ----")
             enemy.attack_player(player)
 
-        # 1秒待機
-        time.sleep(1.7)
+        # HPバーを更新して表示
+        print(f"プレイヤーHP: {create_hp_bar(player.hp, player.body.base_hp)}")
+        print(f"敵HP: {create_hp_bar(enemy.hp, enemy.body.base_hp)}")
+        print()
+        print()
+        print()
+        time.sleep(3.5)
 
         # どちらかが倒れたらループを抜ける
         if player.hp <= 0 or enemy.hp <= 0:
             break
             
-print()
-print()
-print("------------ 戦闘終了 ------------")
-print()
-print()
-print()
+    turn += 1
+
+
+print("---------------- 戦闘終了 ----------------")
 print()
 print()
 time.sleep(2.5)
 
 # 勝敗判定と結果の表示
+print()
+print()
+print()
 if player.hp > 0:
     print(f"【{player.name}の勝利！】")
     time.sleep(1.8)
     print(f"【{enemy.name}を打ち破った！】")
+    print(f"最終HP: {create_hp_bar(player.hp, player.body.base_hp)}")
 else:
     print(f"【{player.name}は敗北した… 】")
     time.sleep(2)
-    print(f"【{player_name}の魂は消滅した。亡骸はダンジョンで眠るだろう… 】")
+    print(f"【{player_name}の魂は消滅した。亡骸はダンジョンに眠る… 】")
+    print(f"残りHP: {create_hp_bar(player.hp, player.body.base_hp)}")
+
+print()
+print()
+print()
+print()
+print()
