@@ -1,4 +1,4 @@
-# 段階3: 会心、逃走、ジョブ相性の追加
+# 段階4: 回避率の追加
 
 
 import sys
@@ -47,8 +47,20 @@ class Player:
         self.attack = self.body.base_attack
         self.speed = self.body.base_speed
 
+    # 回避判定メソッド
+    def is_dodged(self):
+        # 回避率を計算 (例: 素早さ25の暗殺者なら 10 + 25 = 30%)
+        dodge_chance = 10 + self.speed
+        # 1から100までの乱数と回避率を比較
+        return random.randint(1, 100) <= dodge_chance
+
     # 攻撃コマンドメソッド
     def attack_enemy(self, enemy):
+        # 敵の回避判定
+        if enemy.is_dodged():
+            print(f"{enemy.name}は攻撃をうまく回避した！")
+            return # 回避されたらここで処理を終了
+
         damage = self.attack
         is_critical = False
         is_advantage = False
@@ -74,6 +86,7 @@ class Player:
         print(f"  -{damage}")
         print(f"{enemy.name}HP:{create_hp_bar(enemy.hp, enemy.body.base_hp, filled_symbol='💙', empty_symbol=' ♡')}")
 
+    
 
     # 逃走コマンドメソッド
     def run_away(self):
@@ -97,8 +110,20 @@ class Enemy:
         self.attack = self.body.base_attack
         self.speed = self.body.base_speed
 
+    # 回避判定メソッド
+    def is_dodged(self):
+        # 回避率を計算
+        dodge_chance = 10 + self.speed
+        # 1から100までの乱数と回避率を比較
+        return random.randint(1, 100) <= dodge_chance
+
     # プレイヤー攻撃メソッド    
     def attack_player(self, player):
+        # プレイヤーの回避判定
+        if player.is_dodged():
+            print(f"{player.name}は攻撃をうまく回避した！")
+            return
+
         damage = self.attack
         is_critical = False
         is_advantage = False
@@ -190,7 +215,7 @@ player = Player(player_name, initial_job)
 enemy_job = random.choice(jobs)
 enemy = Enemy("敵の" + enemy_job.name, enemy_job)
 
-print(f"\n魂は{player.body.name}の亡骸に憑依した！")
+print(f"\n{player.name}の魂は{player.body.name}の亡骸に憑依した！")
 print(f"ステータス: HP {player.hp}, 攻撃力 {player.attack}, 素早さ: {player.speed}")
 time.sleep(2)
 print()
@@ -239,7 +264,7 @@ while player.hp > 0 and enemy.hp > 0 and not is_ran_away:
 
     # プレイヤーの行動選択を最優先
     action = input("どうしますか？ (1:攻撃, 2:逃走)\n"
-                   '□ ')
+                   '🟥 ')
     print()
     print()
     
@@ -294,16 +319,18 @@ print()
 print()
 print()
 if is_ran_away:
-    print(f"【{player_name}はフロアを脱出した！】")
+    print(f"【{player.name}はフロアを脱出した！】")
+    print(f"残りHP {create_hp_bar(player.hp, player.body.base_hp)}")
 elif player.hp > 0:
-    print(f"【{player_name}の勝利！】")
+    print(f"【{player.name}の勝利！】")
     time.sleep(1.8)
     print(f"【{enemy.name}を打ち破った！】")
-    print(f"残りHP {player.hp}, 最大HP {player.body.base_hp}")
+    print(f"残りHP {create_hp_bar(player.hp, player.body.base_hp)}")
+
 else:
-    print(f"【{player_name}は敗北した… 】")
+    print(f"【{player.name}は敗北した… 】")
     time.sleep(2)
-    print(f"【{player_name}の魂は消滅した。亡骸はダンジョンに眠る… 】")
+    print(f"【{player.name}の魂は消滅した。亡骸はダンジョンに眠る… 】")
     print(f"残りHP {create_hp_bar(player.hp, player.body.base_hp)}")
 
 print()
