@@ -1,5 +1,10 @@
 # 敵（過去の冒険者）のクラス
 
+
+import random
+from utility import create_hp_bar
+
+
 class Enemy:
     def __init__(self, name, job):
         self.name = (f"🟦{name}")

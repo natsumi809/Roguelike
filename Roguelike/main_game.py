@@ -1,7 +1,6 @@
-# 段階4: 回避率の追加
+# --- ゲームの実行部分 ---
 
 
-import sys
 import random
 import time
 
@@ -11,8 +10,6 @@ from soul import Warrior, Mage, Assassin
 from utility import create_hp_bar
 
 
-
-# --- ゲームの実行部分 ---
 
 print()
 print()

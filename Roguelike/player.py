@@ -1,6 +1,12 @@
 # プレイヤー（魂）のクラス
 # 憑依した亡骸のジョブを持つ
 
+
+import random
+from utility import create_hp_bar
+
+
+
 class Player:
     def __init__(self, name, body_job):
         self.name = (f"🟥{name}")
